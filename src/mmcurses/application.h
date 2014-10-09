@@ -73,6 +73,11 @@ namespace mmcurses
         virtual void post_process();
         
         /**
+            This method is called after internal processing but BEFORE checking for invalidation and redrawing.
+        */
+        virtual void process();
+        
+        /**
             The entry point into the application's main loop. It returns the rc passed into quit().
         */
         virtual int exec();

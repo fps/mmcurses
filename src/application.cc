@@ -93,6 +93,10 @@ namespace mmcurses
     {
     }
     
+    void application::process()
+    {
+    }
+    
     /**
         The entry point into the application's main loop. It returns the rc passed into quit().
     */
@@ -121,6 +125,8 @@ namespace mmcurses
             {
                 key_pressed(c);
             }
+            
+            process();
             
             if (m_state->m_invalidated)
             {
