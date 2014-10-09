@@ -1,7 +1,7 @@
 #include <mmcurses/widget_application.h>
 #include <iostream>
 
-struct teqqer : mmcurses::application
+struct application : mmcurses::application
 {
 	virtual void repaint(unsigned width, unsigned height) override
 	{
@@ -18,7 +18,7 @@ struct teqqer : mmcurses::application
 
 int main()
 {
-	teqqer t;
-	return t.exec();
+	application a;
+	return a.exec();
 }
 
