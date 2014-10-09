@@ -23,12 +23,14 @@ struct application : mmcurses::application
         m_progress(0.0f),
         m_speed(0.5f),
         m_last_time(std::chrono::system_clock::now())
-    {   
+    {
+        curs_set(0);
     }
     
     virtual void repaint(unsigned width, unsigned height) override
     {
         mvprintw((int)(m_progress * (float)height), (int)(m_progress * float(width)), "*");
+        mvprintw(height - 1, 0, "Press q to quit");
     }
 
     virtual void key_pressed(int c)
@@ -49,7 +51,7 @@ struct application : mmcurses::application
         std::chrono::milliseconds delta = std::chrono::duration_cast<std::chrono::milliseconds>(now - m_last_time);
         m_last_time = now;
         
-        m_progress += (float)delta.count()/float(1000);
+        m_progress += m_speed * (float)delta.count()/float(1000);
         m_progress = fmodf(m_progress, 1.0f);
         
         invalidate();
