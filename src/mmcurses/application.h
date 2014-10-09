@@ -11,7 +11,7 @@ namespace mmcurses
         
         See the test_mmcurses_application.cc as an example of how to use this class.
         
-        NOTE: In a tradeoff between feature completeness and developer effort, we chose to not support unicode. Also the application is required to redraw the whole screen on repaint. No sophisticated invalidation of regions or similar stuff. If you need a more bandwidth conservative library, please pay me to develop it ;)
+        NOTE: In a tradeoff between feature completeness and developer effort we decided to reduce developer effort. This means: No unicode support. Also the application is required to redraw the whole screen on repaint. No sophisticated invalidation of regions or similar stuff. If you need a more bandwidth conservative library, please pay me (or somebody else) to develop it ;)
         
         See the mmcurses/widget_application.h for a more sophisticated subclass of this that supports widgets, layouts, etc.
     */
@@ -21,6 +21,8 @@ namespace mmcurses
 
         /**
             The constructor initializes the screen and sets up some useful defaults.
+            
+            NOTE: We enable raw(), keypad(), noecho() and halfdelay(1).
         */
         application();
 
@@ -41,6 +43,8 @@ namespace mmcurses
    
         /**
             Put your drawing code here. The default implementation does nothing.
+           
+           NOTE: You need to include ncurses.h to get access to the ncurses drawing functions.
         */
         virtual void repaint(unsigned width, unsigned height);
 
