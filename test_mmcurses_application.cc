@@ -3,8 +3,17 @@
 
 struct application : mmcurses::application
 {
+    unsigned m_number_of_key_presses;
+    
+    application() :
+        m_number_of_key_presses(0)
+    {
+        
+    }
+    
 	virtual void repaint(unsigned width, unsigned height) override
 	{
+        
 	}
 
 	virtual void key_pressed(int c)
@@ -13,6 +22,10 @@ struct application : mmcurses::application
 		{
 			quit(0);
 		}
+		
+		++m_number_of_key_presses;
+        
+        invalidate();
 	}
 };
 

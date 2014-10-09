@@ -46,11 +46,20 @@ namespace mmcurses
         }
 
         /**
-            Reimplement this if you want to react to terminal size changes. The default implementation just calls repaint(width, height).
+            Reimplement this if you want to react to terminal size changes. The default implementation just calls invalidate.
         */
         virtual void size_changed(unsigned width, unsigned height)
         {
-            repaint(width, height);
+            invalidate();
+        }
+   
+        /**
+            Causes repaint() to be called. Refreshes the screen afterwards.
+        */
+        virtual void invalidate()
+        {
+            repaint(m_width, m_height);
+            refresh();
         }
    
         /**
