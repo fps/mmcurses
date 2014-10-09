@@ -19,6 +19,8 @@ namespace mmcurses
 
         int m_width;
         int m_height;
+        
+        bool m_invalidated;
 
         /**
             The constructor initializes the screen and sets up some useful defaults.
@@ -27,7 +29,8 @@ namespace mmcurses
             m_done(false),
             m_rc(0),
             m_width(0),
-            m_height(0)
+            m_height(0),
+            m_invalidated(false)
         {
             SCREEN *s = newterm(getenv("TERM"), stdout, stdin);
             if (s == nullptr) { /* throw */ }
@@ -46,7 +49,7 @@ namespace mmcurses
         }
 
         /**
-            Reimplement this if you want to react to terminal size changes. The default implementation just calls invalidate.
+            Reimplement this if you want to react to terminal size changes. The default implementation just calls invalidate().
         */
         virtual void size_changed(unsigned width, unsigned height)
         {
@@ -54,29 +57,24 @@ namespace mmcurses
         }
    
         /**
-            Causes repaint() to be called. Refreshes the screen afterwards.
+            Causes repaint() to be called from the main loop. Refreshes the screen afterwards.
         */
         virtual void invalidate()
         {
-            repaint(m_width, m_height);
-            refresh();
+            m_invalidated = true;
         }
    
         /**
-            Put your drawing code here. The default implementation just renders some diagnostic text.
+            Put your drawing code here. The default implementation does nothing.
         */
         virtual void repaint(unsigned width, unsigned height)
         {
-            if (height > 0)
-            {
-                
-            }
         }
 
         /**
             Reimplement this if you want to react to key presses. Check the ncurses documentation for the possible key codes k.
             
-            The default implementation just callse quit(0).
+            The default implementation just calls quit(0).
         */
         virtual void key_pressed(int k)
         {
@@ -114,6 +112,14 @@ namespace mmcurses
                     size_changed(m_width, m_height);
                 }        
 
+                if (m_invalidated)
+                {
+                    clear();
+                    repaint(m_width, m_height);
+                    refresh();
+                    m_invalidated = false;
+                }
+                
                 if (c != ERR)
                 {
                     key_pressed(c);

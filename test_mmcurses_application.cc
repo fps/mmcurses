@@ -1,19 +1,21 @@
 #include <mmcurses/widget_application.h>
-#include <iostream>
 
+#include <iostream>
+#include <string>
+#include <sstream>
+#include <algorithm>
+
+
+/**
+    A very simple example that just outputs some diagnostics on the screen.
+*/
 struct application : mmcurses::application
 {
-    unsigned m_number_of_key_presses;
-    
-    application() :
-        m_number_of_key_presses(0)
-    {
-        
-    }
-    
 	virtual void repaint(unsigned width, unsigned height) override
 	{
-        
+        std::stringstream s;
+        s << "Size: " << width << " x " << height << ". Press 'q' to quit.";
+        mvprintw(height / 2, std::max<int>(0, width / 2 - (int)s.str().size() / 2), s.str().c_str());
 	}
 
 	virtual void key_pressed(int c)
@@ -22,8 +24,6 @@ struct application : mmcurses::application
 		{
 			quit(0);
 		}
-		
-		++m_number_of_key_presses;
         
         invalidate();
 	}
