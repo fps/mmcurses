@@ -4,9 +4,11 @@ A small c++ library to somewhat ease ncurses programming
 
 # Documentation
 
-The library is small enough to provide the documentation in the header files in mmcurses/.
+The library is small enough to provide the documentation in the header files in src/mmcurses/ or ($PREFIX/include/mmcurses/ if installed).
 
 # Building and Installation
+
+Change into the root of the source distribution and then perform these steps:
 
 <pre>
 mkdir bld
