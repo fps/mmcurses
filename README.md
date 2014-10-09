@@ -1,6 +1,6 @@
 # mmcurses
 
-A small c++ library to somewhat ease ncurses programming
+A small c++11 library to somewhat ease ncurses programming
 
 # Documentation
 
@@ -19,6 +19,11 @@ make install
 </pre>
 
 NOTE: The last step might have to be performed as superuser.
+
+# Examples
+
+* mmcurses_application_example1: A simple application that prints the current window size, counts key presses and quits on key press q or Q.
+* mmcurses_application_example2: An application that displays a very simple animation using the system's wallclock time.
 
 # Author
 

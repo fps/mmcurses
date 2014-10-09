@@ -1,4 +1,4 @@
-#include <mmcurses/widget_application.h>
+#include <mmcurses/application.h>
 
 #include <iostream>
 #include <string>
@@ -32,10 +32,11 @@ struct application : mmcurses::application
         {
             quit(0);
         }
-        
-        ++m_number_of_key_presses;
-        
-        invalidate();
+        else
+        {
+            ++m_number_of_key_presses;
+            invalidate();
+        }
     }
 };
 
