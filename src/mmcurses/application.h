@@ -68,7 +68,7 @@ namespace mmcurses
         virtual void pre_process();
         
         /**
-            This method is called whenever the main loop gets a chance to run AFTER any internal processing is performed.
+            This method is called whenever the main loop gets a chance to run AFTER any internal processing and redrawing is performed.
         */
         virtual void post_process();
         
