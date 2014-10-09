@@ -74,6 +74,8 @@ namespace mmcurses
         /**
             Reimplement this if you want to react to key presses. Check the ncurses documentation for the possible key codes k.
             
+            Keys codes that are not delivered to this method: ERR, KEY_RESIZE
+            
             The default implementation just calls quit(0).
         */
         virtual void key_pressed(int k)
@@ -120,7 +122,7 @@ namespace mmcurses
                     m_invalidated = false;
                 }
                 
-                if (c != ERR)
+                if (c != ERR && c != KEY_RESIZE)
                 {
                     key_pressed(c);
                 }

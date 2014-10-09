@@ -27,7 +27,7 @@ struct application : mmcurses::application
 
     virtual void key_pressed(int c)
     {
-        if (c == 'q')
+        if (c == 'q' || c == 'Q')
         {
             quit(0);
         }

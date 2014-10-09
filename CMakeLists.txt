@@ -23,7 +23,7 @@ endif()
 SET(CMAKE_BUILD_WITH_INSTALL_RPATH TRUE)
 set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 
-include_directories(${PROJECT_SOURCE_DIR})
+include_directories(${PROJECT_SOURCE_DIR}/src)
 
 add_executable(test_mmcurses_application test_mmcurses_application.cc)
 target_link_libraries(test_mmcurses_application ncurses)
