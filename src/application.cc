@@ -2,6 +2,8 @@
 
 #include <ncurses.h>
 #include <cstdlib>
+#include <chrono>
+#include <thread>
 
 namespace mmcurses
 {
@@ -12,7 +14,8 @@ namespace mmcurses
             m_rc(0),
             m_width(0),
             m_height(0),
-            m_invalidated(false)
+            m_invalidated(false),
+            m_refresh_interval_milliseconds(10)
         {
         }
         
@@ -23,6 +26,8 @@ namespace mmcurses
         int m_height;
         
         bool m_invalidated;
+        
+        unsigned long m_refresh_interval_milliseconds;
 };
     
     application::application() :
@@ -31,9 +36,9 @@ namespace mmcurses
         SCREEN *s = newterm(getenv("TERM"), stdout, stdin);
         if (s == nullptr) { /* throw */ }
         keypad(stdscr, TRUE);
-        raw();
         noecho();
-        halfdelay(1);
+        nodelay(stdscr,1);
+        cbreak();
     }
 
     application::~application()
@@ -97,6 +102,48 @@ namespace mmcurses
     {
     }
     
+    void application::set_refresh_interval_milliseconds(unsigned long interval)
+    {
+        m_state->m_refresh_interval_milliseconds = interval;
+    }
+    
+    void application::iterate()
+    {
+        int c = getch();
+        
+        pre_process();
+        
+        int x,y;
+        getmaxyx(stdscr, y, x);
+
+        bool size_change = x != m_state->m_width || y != m_state->m_height;
+
+        m_state->m_width = x;
+        m_state->m_height = y;
+
+        if (size_change)
+        {
+            size_changed(m_state->m_width, m_state->m_height);
+        }        
+
+        if (c != ERR && c != KEY_RESIZE)
+        {
+            key_pressed(c);
+        }
+        
+        process();
+        
+        if (m_state->m_invalidated)
+        {
+            clear();
+            repaint(m_state->m_width, m_state->m_height);
+            refresh();
+            m_state->m_invalidated = false;
+        }
+        
+        post_process();
+    }
+    
     /**
         The entry point into the application's main loop. It returns the rc passed into quit().
     */
@@ -104,39 +151,9 @@ namespace mmcurses
     {
         while(false == m_state->m_done)
         {
-            int c = getch();
+            iterate();
             
-            pre_process();
-            
-            int x,y;
-            getmaxyx(stdscr, y, x);
-
-            bool size_change = x != m_state->m_width || y != m_state->m_height;
-
-            m_state->m_width = x;
-            m_state->m_height = y;
-
-            if (size_change)
-            {
-                size_changed(m_state->m_width, m_state->m_height);
-            }        
-
-            if (c != ERR && c != KEY_RESIZE)
-            {
-                key_pressed(c);
-            }
-            
-            process();
-            
-            if (m_state->m_invalidated)
-            {
-                clear();
-                repaint(m_state->m_width, m_state->m_height);
-                refresh();
-                m_state->m_invalidated = false;
-            }
-            
-            post_process();
+            std::this_thread::sleep_for(std::chrono::milliseconds(m_state->m_refresh_interval_milliseconds));
        }
         return m_state->m_rc;
     }

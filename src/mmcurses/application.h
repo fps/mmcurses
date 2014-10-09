@@ -78,11 +78,18 @@ namespace mmcurses
         virtual void process();
         
         /**
+            Set the approximate refresh interval in milliseconds.
+        */
+        virtual void set_refresh_interval_milliseconds(unsigned long interval);
+        
+        /**
             The entry point into the application's main loop. It returns the rc passed into quit(). 
             
             NOTE: The main loop runs approximately at least every tenth of a second.
         */
         virtual int exec();
+        
+        virtual void iterate();
     };
 }
 

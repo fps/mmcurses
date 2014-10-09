@@ -25,6 +25,7 @@ struct application : mmcurses::application
         m_last_time(std::chrono::system_clock::now())
     {
         curs_set(0);
+        set_refresh_interval_milliseconds(50);
     }
     
     virtual void repaint(unsigned width, unsigned height) override
