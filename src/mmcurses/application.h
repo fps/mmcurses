@@ -1,23 +1,23 @@
 #pragma once
 
+#include <memory>
+
 namespace mmcurses
 {
+    struct application_state;
+
     /**
         This is a very low level abstraction which basically just provides a main loop functionality around ncurses.
         
         See the test_mmcurses_application.cc as an example of how to use this class.
         
+        NOTE: In a tradeoff between feature completeness and developer effort, we chose to not support unicode. Also the application is required to redraw the whole screen on repaint. No sophisticated invalidation of regions or similar stuff. If you need a more bandwidth conservative library, please pay me to develop it ;)
+        
         See the mmcurses/widget_application.h for a more sophisticated subclass of this that supports widgets, layouts, etc.
     */
     struct application
     {
-        bool m_done;
-        int m_rc;
-
-        int m_width;
-        int m_height;
-        
-        bool m_invalidated;
+        std::auto_ptr<application_state> m_state;
 
         /**
             The constructor initializes the screen and sets up some useful defaults.
@@ -35,7 +35,7 @@ namespace mmcurses
         virtual void size_changed(unsigned width, unsigned height);
    
         /**
-            Causes repaint() to be called from the main loop. Refreshes the screen afterwards.
+            Causes repaint() to be called from the main loop. Clears the screen before calling repaint() and refreshes the screen afterwards by calling ncurses' refresh().
         */
         virtual void invalidate();
    

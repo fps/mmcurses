@@ -5,12 +5,28 @@
 
 namespace mmcurses
 {
+    struct application_state
+    {
+        application_state() :
+            m_done(false),
+            m_rc(0),
+            m_width(0),
+            m_height(0),
+            m_invalidated(false)
+        {
+        }
+        
+        bool m_done;
+        int m_rc;
+
+        int m_width;
+        int m_height;
+        
+        bool m_invalidated;
+};
+    
     application::application() :
-        m_done(false),
-        m_rc(0),
-        m_width(0),
-        m_height(0),
-        m_invalidated(false)
+        m_state(new application_state)
     {
         SCREEN *s = newterm(getenv("TERM"), stdout, stdin);
         if (s == nullptr) { /* throw */ }
@@ -38,7 +54,7 @@ namespace mmcurses
     */
     void application::invalidate()
     {
-        m_invalidated = true;
+        m_state->m_invalidated = true;
     }
 
     /**
@@ -65,8 +81,8 @@ namespace mmcurses
     */
     void application::quit(int rc)
     {
-        m_rc = rc;
-        m_done = true;
+        m_state->m_rc = rc;
+        m_state->m_done = true;
     }
 
     /**
@@ -74,29 +90,29 @@ namespace mmcurses
     */
     int application::exec()
     {
-        while(false == m_done)
+        while(false == m_state->m_done)
         {
             int c = getch();
             
             int x,y;
             getmaxyx(stdscr, y, x);
 
-            bool size_change = x != m_width || y != m_height;
+            bool size_change = x != m_state->m_width || y != m_state->m_height;
 
-            m_width = x;
-            m_height = y;
+            m_state->m_width = x;
+            m_state->m_height = y;
 
             if (size_change)
             {
-                size_changed(m_width, m_height);
+                size_changed(m_state->m_width, m_state->m_height);
             }        
 
-            if (m_invalidated)
+            if (m_state->m_invalidated)
             {
                 clear();
-                repaint(m_width, m_height);
+                repaint(m_state->m_width, m_state->m_height);
                 refresh();
-                m_invalidated = false;
+                m_state->m_invalidated = false;
             }
             
             if (c != ERR && c != KEY_RESIZE)
@@ -104,6 +120,6 @@ namespace mmcurses
                 key_pressed(c);
             }
         }
-        return m_rc;
+        return m_state->m_rc;
     }
 }
