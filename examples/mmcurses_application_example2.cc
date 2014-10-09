@@ -33,7 +33,7 @@ struct application : mmcurses::application
         mvprintw(height - 1, 0, "Press q to quit");
     }
 
-    virtual void key_pressed(int c)
+    virtual void key_pressed(int c) override
     {
         if (c == 'q' || c == 'Q')
         {

@@ -26,7 +26,7 @@ struct application : mmcurses::application
         mvprintw(height / 2, std::max<int>(0, width / 2 - (int)s.str().size() / 2), s.str().c_str());
     }
 
-    virtual void key_pressed(int c)
+    virtual void key_pressed(int c) override
     {
         if (c == 'q' || c == 'Q')
         {
