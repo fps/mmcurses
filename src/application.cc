@@ -85,6 +85,14 @@ namespace mmcurses
         m_state->m_done = true;
     }
 
+    void application::pre_process()
+    {
+    }
+    
+    void application::post_process()
+    {
+    }
+    
     /**
         The entry point into the application's main loop. It returns the rc passed into quit().
     */
@@ -93,6 +101,8 @@ namespace mmcurses
         while(false == m_state->m_done)
         {
             int c = getch();
+            
+            pre_process();
             
             int x,y;
             getmaxyx(stdscr, y, x);
@@ -107,6 +117,11 @@ namespace mmcurses
                 size_changed(m_state->m_width, m_state->m_height);
             }        
 
+            if (c != ERR && c != KEY_RESIZE)
+            {
+                key_pressed(c);
+            }
+            
             if (m_state->m_invalidated)
             {
                 clear();
@@ -115,11 +130,8 @@ namespace mmcurses
                 m_state->m_invalidated = false;
             }
             
-            if (c != ERR && c != KEY_RESIZE)
-            {
-                key_pressed(c);
-            }
-        }
+            post_process();
+       }
         return m_state->m_rc;
     }
 }

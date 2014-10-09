@@ -63,6 +63,16 @@ namespace mmcurses
         virtual void quit(int rc);
 
         /**
+            This method is called whenever the main loop gets a chance to run BEFORE any internal processing is performed.
+        */
+        virtual void pre_process();
+        
+        /**
+            This method is called whenever the main loop gets a chance to run AFTER any internal processing is performed.
+        */
+        virtual void post_process();
+        
+        /**
             The entry point into the application's main loop. It returns the rc passed into quit().
         */
         virtual int exec();
