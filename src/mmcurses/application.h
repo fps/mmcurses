@@ -1,8 +1,5 @@
 #pragma once
 
-#include <ncurses.h>
-#include <cstdlib>
-
 namespace mmcurses
 {
     /**

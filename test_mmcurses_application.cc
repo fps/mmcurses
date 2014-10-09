@@ -5,6 +5,7 @@
 #include <sstream>
 #include <algorithm>
 
+#include <ncurses.h>
 
 /**
     A very simple example that just outputs some diagnostics on the screen.
