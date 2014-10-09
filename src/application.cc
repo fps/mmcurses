@@ -109,9 +109,9 @@ namespace mmcurses
     
     void application::iterate()
     {
-        int c = getch();
-        
         pre_process();
+        
+        int c = getch();
         
         int x,y;
         getmaxyx(stdscr, y, x);
@@ -152,9 +152,8 @@ namespace mmcurses
         while(false == m_state->m_done)
         {
             iterate();
-            
             std::this_thread::sleep_for(std::chrono::milliseconds(m_state->m_refresh_interval_milliseconds));
-       }
+        }
         return m_state->m_rc;
     }
 }

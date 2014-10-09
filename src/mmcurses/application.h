@@ -89,6 +89,9 @@ namespace mmcurses
         */
         virtual int exec();
         
+        /**
+            Run the "main loop" once.
+        */
         virtual void iterate();
     };
 }
