@@ -78,7 +78,9 @@ namespace mmcurses
         virtual void process();
         
         /**
-            The entry point into the application's main loop. It returns the rc passed into quit().
+            The entry point into the application's main loop. It returns the rc passed into quit(). 
+            
+            NOTE: The main loop runs approximately at least every tenth of a second.
         */
         virtual int exec();
     };

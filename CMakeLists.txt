@@ -21,14 +21,14 @@ else()
 endif()
 
 SET(CMAKE_BUILD_WITH_INSTALL_RPATH TRUE)
-set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
+SET(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 
 include_directories(${PROJECT_SOURCE_DIR}/src)
 
-add_library(mmcurses SHARED src/application.cc)
+add_library(mmcurses src/application.cc)
 target_link_libraries(mmcurses ncurses)
 
-add_executable(test_mmcurses_application test_mmcurses_application.cc)
-target_link_libraries(test_mmcurses_application mmcurses)
+add_executable(mmcurses_application_example1 mmcurses_application_example1.cc)
+target_link_libraries(mmcurses_application_example1 mmcurses)
 
 
