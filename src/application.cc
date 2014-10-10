@@ -15,7 +15,7 @@ namespace mmcurses
             m_width(0),
             m_height(0),
             m_invalidated(false),
-            m_refresh_interval_milliseconds(10)
+            m_refresh_interval_milliseconds(100)
         {
         }
         

@@ -2,6 +2,7 @@
 
 #include <cstdint>
 #include <vector>
+#include <utility>
 
 #include <mmcurses/geometry.h>
 #include <mmcurses/render_buffer.h>
@@ -43,8 +44,10 @@ namespace mmcurses
             /**
                 Return true if you handled the event.
             */
-            virtual bool process_event(const event::base &e) = 0;
+            virtual bool process_key_event(const event::key &e) = 0;
         };
+        
+        typedef std::shared_ptr<base> ptr;
         
         /**
             A widget that renders the same character to
@@ -61,7 +64,9 @@ namespace mmcurses
             
             void render(render_buffer_view &buffer)
             {
-                buffer.fill(m_character, geometry::rectangle(geometry::position(0,0), geometry::size(buffer.m_size)));
+                namespace g = geometry;
+                
+                buffer.fill(m_character, g::rectangle(g::position(0,0), g::size(buffer.m_size)));
             }
             
             bool focussable() override
@@ -69,7 +74,7 @@ namespace mmcurses
                 return false;
             }
             
-            bool process_event(const event::base &e) override
+            bool process_key_event(const event::key &e) override
             {
                 return false;
             }
@@ -78,6 +83,24 @@ namespace mmcurses
             {
                 return geometry::size(1,1);
             }
+        };
+        
+        struct rows
+        {
+            typedef std::vector<std::pair<ptr, float>> widgets_with_weights;
+            
+            widgets_with_weights m_widgets_with_weights;
+            
+            rows(widgets_with_weights &widgets) :
+                m_widgets_with_weights(widgets)
+            {
+                
+            }
+        };
+        
+        struct columns
+        {
+            
         };
     }
 }

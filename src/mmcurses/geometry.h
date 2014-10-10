@@ -26,6 +26,14 @@ namespace mmcurses
                 m_height(height)
             {
             }
+            
+            size &operator+(const size &s)
+            {
+                m_width += s.m_width;
+                m_height += s.m_height;
+                
+                return *this;
+            }
         };
         
         struct rectangle

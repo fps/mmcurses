@@ -11,7 +11,7 @@ namespace mmcurses
 {
     struct widget_application : application
     {
-        widget_application(std::shared_ptr<widget::base> widget) :
+        widget_application(widget::ptr widget) :
             m_widget(widget)
         {
             mousemask(ALL_MOUSE_EVENTS, NULL);
@@ -40,6 +40,7 @@ namespace mmcurses
                         0
                     };
                     
+                    //! TODO: What about unicode here?
                     mvprintw(index_y, index_x, (char*)(c));
                 }
             }
@@ -47,10 +48,16 @@ namespace mmcurses
         
         void key_pressed(int k) override
         {
-            event::key key_event;
-            m_widget->process_event(key_event);
+            if (m_widget->focussable())
+            {
+                event::key key_event;
+                
+                //! TODO: What about unicode here?
+                key_event.m_key = k;
+                m_widget->process_key_event(key_event);
+                
+                invalidate();
+            }
         }
     };
-    
-    typedef std::shared_ptr<widget::base> widget_ptr;
 }
