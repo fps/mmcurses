@@ -82,7 +82,6 @@ namespace mmcurses
                 {
                     at(geometry::position(index_x, index_y)) = c;
                 }
-                
             }
         }
     };
