@@ -3,6 +3,7 @@
 #include <cstdint>
 #include <vector>
 #include <utility>
+#include <algorithm>
 
 #include <mmcurses/geometry.h>
 #include <mmcurses/render_buffer.h>
@@ -85,16 +86,62 @@ namespace mmcurses
             }
         };
         
-        struct rows
+        struct rows : base
         {
-            typedef std::vector<std::pair<ptr, float>> widgets_with_weights;
+            typedef std::vector<std::pair<ptr, uint32_t>> widgets_with_weights;
             
             widgets_with_weights m_widgets_with_weights;
             
             rows(widgets_with_weights &widgets) :
                 m_widgets_with_weights(widgets)
             {
+            }
+            
+            void render(render_buffer_view &buffer) override
+            {
+                namespace g = geometry;
                 
+                uint32_t sum_of_weights = 0;
+                int sum_of_heights = 0;
+                int sum_of_zero_weight_heights = 0;
+                
+                for (const auto &w : m_widgets_with_weights)
+                {
+                    sum_of_weights += w.second;
+                    sum_of_heights += w.first->size().m_height;
+                    if (w.second == 0)
+                    {
+                        sum_of_zero_weight_heights += w.first->size().m_height;
+                    }
+                }
+                
+                
+            }
+            
+            bool focussable() override
+            {
+                return false;
+            }
+            
+            bool process_key_event(const event::key &e) override
+            {
+                return false;
+            }
+            
+            geometry::size size() override
+            {
+                geometry::size r(0,0);
+                
+                for (const auto &w : m_widgets_with_weights)
+                {
+                    r.m_height += w.first->size().m_height;
+                    if (w.first->size().m_width > r.m_width)
+                    {
+                        r.m_width = w.first->size().m_width;
+                    }
+                }
+                
+                return r;
             }
         };
         
