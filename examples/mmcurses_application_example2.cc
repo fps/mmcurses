@@ -40,10 +40,6 @@ struct application : mmcurses::application
         {
             quit(0);
         }
-        else
-        {
-            invalidate();
-        }
     }
     
     virtual void process() override
