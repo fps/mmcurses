@@ -34,14 +34,21 @@ namespace mmcurses
             {
                 for (int index_y = 0; index_y < buffer.m_size.m_height; ++index_y)
                 {
-                    const char c[2] =
+                    uint32_t c[2] =
                     {
-                        (char)buffer.at(geometry::position(index_x, index_y)),
+                        buffer.at(geometry::position(index_x, index_y)),
                         0
                     };
-                    mvprintw(index_y, index_x, c);
+                    
+                    mvprintw(index_y, index_x, (char*)(c));
                 }
             }
+        }
+        
+        void key_pressed(int k) override
+        {
+            event::key key_event;
+            m_widget->process_event(key_event);
         }
     };
     
