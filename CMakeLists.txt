@@ -34,3 +34,6 @@ target_link_libraries(mmcurses_application_example1 mmcurses)
 add_executable(mmcurses_application_example2 examples/mmcurses_application_example2.cc)
 target_link_libraries(mmcurses_application_example2 mmcurses)
 
+add_executable(mmcurses_widget_application_example1 examples/mmcurses_widget_application_example1.cc)
+target_link_libraries(mmcurses_widget_application_example1 mmcurses)
+

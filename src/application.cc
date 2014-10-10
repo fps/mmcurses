@@ -7,9 +7,9 @@
 
 namespace mmcurses
 {
-    struct application_state
+    struct application::state
     {
-        application_state() :
+        state() :
             m_done(false),
             m_rc(0),
             m_width(0),
@@ -31,7 +31,7 @@ namespace mmcurses
 };
     
     application::application() :
-        m_state(new application_state)
+        m_state(new state)
     {
         SCREEN *s = newterm(getenv("TERM"), stdout, stdin);
         if (s == nullptr) { /* throw */ }
