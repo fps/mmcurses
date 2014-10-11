@@ -126,6 +126,8 @@ namespace mmcurses
                 
                 widgets_with_weights w2 = m_widgets_with_weights;
                 
+                int current_y_position = 0;
+                
                 for (auto &w : w2)
                 {
                     if (space_remaining > 0)
@@ -144,6 +146,8 @@ namespace mmcurses
                         space_remaining -= w.second;
                     }
                     
+                    
+                    
                     render_buffer_view widget_buffer
                     (
                         geometry::size
@@ -154,6 +158,16 @@ namespace mmcurses
                     );
                     
                     w.first->render(widget_buffer);
+                    
+                    for (int x = 0; x < widget_buffer.m_size.m_width; ++x)
+                    {
+                        for (int y = 0; y < widget_buffer.m_size.m_height; ++y)
+                        {
+                            buffer.at(geometry::position(x, current_y_position + y)) = widget_buffer.at(geometry::position(x,y));
+                        }   
+                    }
+                    
+                    current_y_position += w.second + w.first->size().m_height;
                 }
             }
             
