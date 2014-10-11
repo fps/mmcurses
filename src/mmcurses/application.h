@@ -1,11 +1,11 @@
 #pragma once
 
+#include <mmcurses/no_copy.h>
+
 #include <memory>
 
 namespace mmcurses
 {
-    struct application_state;
-
     /**
         This is a very low level abstraction which basically just provides a main loop functionality around ncurses.
         
@@ -15,9 +15,11 @@ namespace mmcurses
         
         See the mmcurses/widget_application.h for a more sophisticated subclass of this that supports widgets, layouts, etc.
     */
-    struct application
+    struct application : no_copy
     {
-        std::auto_ptr<application_state> m_state;
+        struct state;
+
+        std::auto_ptr<state> m_state;
 
         /**
             The constructor initializes the screen and sets up some useful defaults.

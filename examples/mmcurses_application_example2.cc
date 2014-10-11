@@ -40,16 +40,14 @@ struct application : mmcurses::application
         {
             quit(0);
         }
-        else
-        {
-            invalidate();
-        }
     }
     
     virtual void process() override
     {
-        std::chrono::system_clock::time_point now = std::chrono::system_clock::now();
-        std::chrono::milliseconds delta = std::chrono::duration_cast<std::chrono::milliseconds>(now - m_last_time);
+        using namespace std::chrono;
+        
+        system_clock::time_point now = system_clock::now();
+        milliseconds delta = duration_cast<milliseconds>(now - m_last_time);
         m_last_time = now;
         
         m_progress += m_speed * (float)delta.count()/float(1000);

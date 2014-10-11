@@ -7,15 +7,15 @@
 
 namespace mmcurses
 {
-    struct application_state
+    struct application::state
     {
-        application_state() :
+        state() :
             m_done(false),
             m_rc(0),
             m_width(0),
             m_height(0),
             m_invalidated(false),
-            m_refresh_interval_milliseconds(10)
+            m_refresh_interval_milliseconds(100)
         {
         }
         
@@ -31,7 +31,7 @@ namespace mmcurses
     };
     
     application::application() :
-        m_state(new application_state)
+        m_state(new state)
     {
         SCREEN *s = newterm(getenv("TERM"), stdout, stdin);
         if (s == nullptr) { /* throw */ }
@@ -105,7 +105,7 @@ namespace mmcurses
         if (size_change)
         {
             size_changed(m_state->m_width, m_state->m_height);
-        }        
+        }
 
         if (c != ERR && c != KEY_RESIZE)
         {
@@ -125,9 +125,6 @@ namespace mmcurses
         post_process();
     }
     
-    /**
-        The entry point into the application's main loop. It returns the rc passed into quit().
-    */
     int application::exec()
     {
         while(false == m_state->m_done)
