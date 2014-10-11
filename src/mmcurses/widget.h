@@ -163,7 +163,8 @@ namespace mmcurses
                     {
                         for (int y = 0; y < widget_buffer.m_size.m_height; ++y)
                         {
-                            buffer.at(geometry::position(x, current_y_position + y)) = widget_buffer.at(geometry::position(x,y));
+                            buffer.at(g::position(x, current_y_position + y)) = 
+                                widget_buffer.at(g::position(x,y));
                         }   
                     }
                     
