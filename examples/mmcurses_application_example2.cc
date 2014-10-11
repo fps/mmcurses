@@ -31,7 +31,7 @@ struct application : mmcurses::application
     virtual void repaint(unsigned width, unsigned height) override
     {
         mvprintw((int)(m_progress * (float)height), (int)(m_progress * float(width)), "*");
-        mvprintw(height - 1, 0, "Press q to quit");
+        mvprintw(height - 1, 0, "Press 'q' to quit");
     }
 
     virtual void key_pressed(int c) override

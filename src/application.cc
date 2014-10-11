@@ -28,7 +28,7 @@ namespace mmcurses
         bool m_invalidated;
         
         unsigned long m_refresh_interval_milliseconds;
-};
+    };
     
     application::application() :
         m_state(new application_state)
@@ -46,44 +46,25 @@ namespace mmcurses
         endwin();
     }
 
-    /**
-        Reimplement this if you want to react to terminal size changes. The default implementation just calls invalidate().
-    */
     void application::size_changed(unsigned width, unsigned height)
     {
         invalidate();
     }
 
-    /**
-        Causes repaint() to be called from the main loop. Refreshes the screen afterwards.
-    */
     void application::invalidate()
     {
         m_state->m_invalidated = true;
     }
 
-    /**
-        Put your drawing code here. The default implementation does nothing.
-    */
     void application::repaint(unsigned width, unsigned height)
     {
     }
 
-    /**
-        Reimplement this if you want to react to key presses. Check the ncurses documentation for the possible key codes k.
-        
-        Keys codes that are not delivered to this method: ERR, KEY_RESIZE
-        
-        The default implementation just calls quit(0).
-    */
     void application::key_pressed(int k)
     {
         quit(0);
     }
 
-    /**
-        Call this function to make the application exit at a point in the future.
-    */
     void application::quit(int rc)
     {
         m_state->m_rc = rc;
