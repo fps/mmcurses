@@ -6,6 +6,15 @@ A small c++11 library to somewhat ease ncurses programming
 
 The library is small enough to provide the documentation in the header files in src/mmcurses/ or ($PREFIX/include/mmcurses/ if installed).
 
+For convenience there is also a Doxyfile. So you can do this:
+
+<pre>
+mkdir docs
+doxygen
+</pre>
+
+to generate documentation for the library.
+
 # Building and Installation
 
 Change into the root of the source distribution and then perform these steps:
