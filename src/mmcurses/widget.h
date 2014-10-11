@@ -67,7 +67,11 @@ namespace mmcurses
             {
                 namespace g = geometry;
                 
-                buffer.fill(m_character, g::rectangle(g::position(0,0), g::size(buffer.m_size)));
+                buffer.fill
+                (
+                    m_character, 
+                    g::rectangle(g::position(0,0), g::size(buffer.m_size))
+                );
             }
             
             bool focussable() override
@@ -115,7 +119,42 @@ namespace mmcurses
                     }
                 }
                 
+                sum_of_weights = std::max<uint32_t>(1, sum_of_weights);
                 
+                int space = buffer.m_size.m_height - sum_of_heights;
+                int space_remaining = space;
+                
+                widgets_with_weights w2 = m_widgets_with_weights;
+                
+                for (auto &w : w2)
+                {
+                    if (space_remaining > 0)
+                    {
+                        w.second = (uint32_t)std::min<float>
+                        (
+                            (float)space_remaining, 
+                            ceilf
+                            (
+                                  (float)space 
+                                * (float)w.second 
+                                / (float)sum_of_weights
+                            )
+                        );
+                        
+                        space_remaining -= w.second;
+                    }
+                    
+                    render_buffer_view widget_buffer
+                    (
+                        geometry::size
+                        (
+                            buffer.m_size.m_width, 
+                            w.second + w.first->size().m_height
+                        )
+                    );
+                    
+                    w.first->render(widget_buffer);
+                }
             }
             
             bool focussable() override
