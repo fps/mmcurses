@@ -163,6 +163,10 @@ namespace mmcurses
                     {
                         for (int y = 0; y < widget_buffer.m_size.m_height; ++y)
                         {
+                            if (false == (y + current_y_position < buffer.m_size.m_height))
+                            {
+                                break;
+                            }
                             buffer.at(g::position(x, current_y_position + y)) = 
                                 widget_buffer.at(g::position(x,y));
                         }   
