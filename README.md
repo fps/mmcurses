@@ -9,11 +9,10 @@ The library is small enough to provide the documentation in the header files in 
 For convenience there is also a Doxyfile. So you can do this:
 
 <pre>
-mkdir docs
 doxygen
 </pre>
 
-to generate documentation for the library.
+to generate documentation for the library in the subdirectory <code>docs</code>.
 
 # Building and Installation
 
