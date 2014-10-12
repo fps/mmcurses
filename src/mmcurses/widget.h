@@ -253,17 +253,15 @@ namespace mmcurses
 
             bool focussable() override
             {
-                bool ret = false;
-                
                 for (auto &w : m_widgets_with_weights)
                 {
                     if (w.first->focussable())
                     {
-                        ret = true;
+                        return true;
                     }
                 }
                 
-                return ret;
+                return false;
             }
             
             void process_key_event(const event::key &e) override

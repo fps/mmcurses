@@ -61,6 +61,9 @@ namespace mmcurses
                 {
                     m_widget->enter_focus();
                 }
+                
+                invalidate();
+                return;
             }
             
             //! TODO: What about unicode here?
