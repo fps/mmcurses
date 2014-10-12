@@ -5,6 +5,7 @@
 #include <utility>
 #include <algorithm>
 #include <sstream>
+#include <memory>
 
 #include <mmcurses/geometry.h>
 #include <mmcurses/render_buffer.h>
@@ -19,6 +20,17 @@ namespace mmcurses
         */
         struct base
         {
+            /**
+                When true, indicates that this widget has focus (one of its 
+                children having focus also indicates truth).
+            */
+            bool m_focussed;
+            
+            base() :
+                m_focussed(false)
+            {
+            }
+            
             /**
                 Return the size that would be optimal for
                 presenting the widget given its current 
@@ -58,20 +70,25 @@ namespace mmcurses
             }
             
             /**
-                Return true if you handled the event.
+                React to key presses.
             */
-            virtual bool process_key_event(const event::key &e)
+            virtual void process_key_event(const event::key &e)
             {
-                return false;
             }
             
             virtual bool enter_focus()
             {
+                if (true == focussable())
+                {
+                    m_focussed = true;
+                    return true;
+                }
                 return false;
             }
             
             virtual bool advance_focus()
             {
+                m_focussed = false;
                 return false;
             }
         };
@@ -103,11 +120,6 @@ namespace mmcurses
             }
             
             bool focussable() override
-            {
-                return false;
-            }
-            
-            bool process_key_event(const event::key &e) override
             {
                 return false;
             }
@@ -191,12 +203,7 @@ namespace mmcurses
                     {
                         for (int y = 0; y < widget_buffer.m_size.m_height; ++y)
                         {
-                            if (false == (y + current_y_position < buffer.m_size.m_height))
-                            {
-                                break;
-                            }
-                            
-                            buffer.at(g::position(x, current_y_position + y)) = 
+                             buffer.at(g::position(x, current_y_position + y)) = 
                                 widget_buffer.at(g::position(x,y));
                         }
                     }
@@ -205,14 +212,66 @@ namespace mmcurses
                 }
             }
             
-            bool focussable() override
+                 
+            bool enter_focus() override
             {
+                for (auto &w : m_widgets_with_weights)
+                {
+                    if (w.first->focussable())
+                    {
+                        w.first->enter_focus();
+                        return true;
+                    }
+                }
+                
                 return false;
             }
             
-            bool process_key_event(const event::key &e) override
+            bool advance_focus() override
             {
-                return false;
+                bool advance = false;
+                for (auto &w : m_widgets_with_weights)
+                {
+                    if (advance)
+                    {
+                        if (w.first->focussable())
+                        {
+                            w.first->enter_focus();
+                            return true;
+                        }
+                    }
+                    
+                    if (w.first->m_focussed)
+                    {
+                        w.first->m_focussed = w.first->advance_focus();
+                        advance = !w.first->m_focussed;
+                    }
+                    
+                }
+               return false;
+            }
+
+            bool focussable() override
+            {
+                bool ret = false;
+                
+                for (auto &w : m_widgets_with_weights)
+                {
+                    if (w.first->focussable())
+                    {
+                        ret = true;
+                    }
+                }
+                
+                return ret;
+            }
+            
+            void process_key_event(const event::key &e) override
+            {
+                for (auto &w : m_widgets_with_weights)
+                {
+                    w.first->process_key_event(e);
+                }
             }
             
             geometry::size size() override

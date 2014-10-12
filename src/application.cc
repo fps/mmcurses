@@ -92,6 +92,7 @@ namespace mmcurses
     {
         pre_process();
         
+        //! TODO: iterate while getch() returns !ERR and process stuff..
         int c = getch();
         
         int x,y;

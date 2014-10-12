@@ -13,15 +13,17 @@ struct constant_char : mmcurses::widget::constant
         return true;
     }
 
-    bool process_key_event(const mmcurses::event::key &e) override
+    void process_key_event(const mmcurses::event::key &e) override
     {
+        if (false == m_focussed)
+        {
+            return;
+        }
+        
         if (e.m_key < 255)
         {
             m_character = e.m_key;
-            return true;
         }
-        
-        return false;
     }
 };
 
