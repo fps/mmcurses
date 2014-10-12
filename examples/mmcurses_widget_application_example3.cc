@@ -29,8 +29,10 @@ int main()
 {
     mmcurses::widget::rows::widgets_with_weights w =
     {
+        { mmcurses::widget::ptr(new mmcurses::widget::label("I am a label")), 0 },
         { mmcurses::widget::ptr(new constant_char('#')), 0 },
         { mmcurses::widget::ptr(new constant_char('-')), 2 },
+        { mmcurses::widget::ptr(new mmcurses::widget::label("I am a label\nwith a newline.\n\nand some more\n\n")), 0 },
         { mmcurses::widget::ptr(new constant_char('+')), 1 },
         { mmcurses::widget::ptr(new mmcurses::widget::label("I am a label")), 0 }
     };
