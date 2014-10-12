@@ -231,9 +231,32 @@ namespace mmcurses
             }
         };
         
-        struct columns
+        struct columns : base
         {
             
+        };
+        
+        struct label : base
+        {
+            std::string m_text;
+            
+            label(std::string text) :
+                m_text(text)
+            {
+            }
+            
+            geometry::size size()
+            {
+                return geometry::size((int)m_text.size(), 1);
+            }
+            
+            void render(render_buffer_view &buffer)
+            {
+                for (size_t index = 0; index < m_text.size(); ++index)
+                {
+                    buffer.at(geometry::position((int)index, 0)) = m_text[index];
+                }
+            }
         };
     }
 }
