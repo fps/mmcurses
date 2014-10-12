@@ -23,7 +23,11 @@ namespace mmcurses
                 presenting the widget given its current 
                 state.
             */
-            virtual geometry::size size() = 0;
+            virtual geometry::size size()
+            {
+                namespace g = geometry;
+                return g::size(1,1);
+            }
             
             /**
                 Render your widget into the passed buffer.
@@ -32,7 +36,14 @@ namespace mmcurses
                 different (most probably is) than what is 
                 returned by size().
             */
-            virtual void render(render_buffer_view &buffer) = 0;
+            virtual void render(render_buffer_view &buffer)
+            {
+                namespace g = geometry;
+                if (buffer.m_size.m_width > 0 && buffer.m_size.m_height > 0)
+                {
+                    buffer.at(g::position(0,0)) = '#';
+                }
+            }
             
             /**
                 Return true to receive keyboard events.
@@ -40,12 +51,28 @@ namespace mmcurses
                 NOTE: The widget should set a cursor position
                 if it handles keyboard events.
             */
-            virtual bool focussable() = 0;
+            virtual bool focussable()
+            {
+                return false;
+            }
             
             /**
                 Return true if you handled the event.
             */
-            virtual bool process_key_event(const event::key &e) = 0;
+            virtual bool process_key_event(const event::key &e)
+            {
+                return false;
+            }
+            
+            virtual bool enter_focus()
+            {
+                return false;
+            }
+            
+            virtual bool advance_focus()
+            {
+                return false;
+            }
         };
         
         typedef std::shared_ptr<base> ptr;
@@ -167,9 +194,10 @@ namespace mmcurses
                             {
                                 break;
                             }
+                            
                             buffer.at(g::position(x, current_y_position + y)) = 
                                 widget_buffer.at(g::position(x,y));
-                        }   
+                        }
                     }
                     
                     current_y_position += w.second + w.first->size().m_height;
