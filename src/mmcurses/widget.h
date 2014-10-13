@@ -11,13 +11,31 @@
 
 namespace mmcurses
 {
+    namespace layout
+    {
+        struct base
+        {
+            
+        };
+        
+        typedef std::shared_ptr<base> ptr;
+    }
+    
     namespace widget
     {
+        struct base;
+        
+        typedef std::shared_ptr<base> ptr;
+        
         /**
             Abstract base type for widgets.
         */
         struct base
         {
+            std::vector<ptr> m_children;
+            
+            layout::ptr m_layout;
+            
             /**
                 Return the size that would be optimal for
                 presenting the widget given its current 
@@ -75,7 +93,6 @@ namespace mmcurses
             }
         };
         
-        typedef std::shared_ptr<base> ptr;
         
         /**
             A widget that renders the same character to
