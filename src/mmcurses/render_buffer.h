@@ -14,13 +14,27 @@ namespace mmcurses
         render_buffer(geometry::size s) :
             m_size(s),
             m_cursor_position(0,0),
-            m_characters(s.m_width * s.m_height, ' ')
+            m_characters(s.m_width * s.m_height, ' '),
+            m_null('~')
         {
         }
         
         character &at(geometry::position p)
         {
-            return m_characters[p.m_y * m_size.m_width + p.m_x];
+            if 
+            (
+                   p.m_x < m_size.m_width
+                && p.m_x >= 0
+                && p.m_y < m_size.m_height
+                && p.m_y >= 0
+            )
+            {
+                return m_characters[p.m_y * m_size.m_width + p.m_x];
+            }
+            else
+            {
+                return m_null;
+            }
         }
         
         const geometry::size m_size;
@@ -28,6 +42,8 @@ namespace mmcurses
         geometry::position m_cursor_position;
         
         std::vector<character> m_characters;
+
+        character m_null;
     };
     
     struct render_buffer_view : render_buffer

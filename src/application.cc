@@ -14,7 +14,7 @@ namespace mmcurses
             m_rc(0),
             m_width(0),
             m_height(0),
-            m_invalidated(false),
+            m_invalidated(true),
             m_refresh_interval_milliseconds(100)
         {
         }
@@ -89,10 +89,8 @@ namespace mmcurses
     }
     
     void application::iterate()
-    {
+    {        
         pre_process();
-        
-        int c = getch();
         
         int x,y;
         getmaxyx(stdscr, y, x);
@@ -107,9 +105,14 @@ namespace mmcurses
             size_changed(m_state->m_width, m_state->m_height);
         }
 
-        if (c != ERR && c != KEY_RESIZE)
+        //! TODO: iterate while getch() returns !ERR and process stuff..
+        int c;
+        while((c = getch()) != ERR)
         {
-            key_pressed(c);
+            if (c != KEY_RESIZE)
+            {
+                key_pressed(c);
+            }
         }
         
         process();

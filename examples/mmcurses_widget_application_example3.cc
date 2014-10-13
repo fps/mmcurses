@@ -13,28 +13,32 @@ struct constant_char : mmcurses::widget::constant
         return true;
     }
 
-    bool process_key_event(const mmcurses::event::key &e) override
+    void process_key_event(const mmcurses::event::key &e) override
     {
+        if (false == m_focussed)
+        {
+            return;
+        }
+        
         if (e.m_key < 255)
         {
             m_character = e.m_key;
-            return true;
         }
-        
-        return false;
     }
 };
 
 int main()
 {
-    mmcurses::widget::rows::widgets_with_weights w(3);
-    
-    w[0].first = mmcurses::widget::ptr(new constant_char('#'));
-    w[1].first = mmcurses::widget::ptr(new constant_char('-'));
-    w[2].first = mmcurses::widget::ptr(new constant_char('+'));
-    
-    w[1].second = 1;
-    
+    mmcurses::widget::rows::widgets_with_weights w =
+    {
+        { mmcurses::widget::ptr(new mmcurses::widget::label("I am a label")), 0 },
+        { mmcurses::widget::ptr(new constant_char('#')), 0 },
+        { mmcurses::widget::ptr(new constant_char('-')), 2 },
+        { mmcurses::widget::ptr(new mmcurses::widget::label("I am a label\nwith a newline.\n\nand some more\n\n")), 0 },
+        { mmcurses::widget::ptr(new constant_char('+')), 1 },
+        { mmcurses::widget::ptr(new mmcurses::widget::label("I am a label")), 0 }
+    };
+        
     mmcurses::widget::ptr r(new mmcurses::widget::rows(w));
     mmcurses::widget_application a(r);
     

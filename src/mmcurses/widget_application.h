@@ -15,6 +15,10 @@ namespace mmcurses
             m_widget(widget)
         {
             mousemask(ALL_MOUSE_EVENTS, NULL);
+            if (m_widget->focussable())
+            {
+                m_widget->enter_focus();
+            }
         }
         
         std::shared_ptr<widget::base> m_widget;
@@ -48,16 +52,25 @@ namespace mmcurses
         
         void key_pressed(int k) override
         {
-            if (m_widget->focussable())
+            event::key key_event;
+            
+            //! We treat TAB and SHIFT-TAB here to advance the focus
+            if (k == '\t' && m_widget->focussable())
             {
-                event::key key_event;
-                
-                //! TODO: What about unicode here?
-                key_event.m_key = k;
-                m_widget->process_key_event(key_event);
+                if (false == m_widget->advance_focus())
+                {
+                    m_widget->enter_focus();
+                }
                 
                 invalidate();
+                return;
             }
+            
+            //! TODO: What about unicode here?
+            key_event.m_key = k;
+            m_widget->process_key_event(key_event);
+            
+            invalidate();
         }
     };
 }
