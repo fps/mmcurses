@@ -20,7 +20,7 @@ namespace mmcurses
                 set_text(text);
             }
             
-            void set_text(std::string text)
+            virtual void set_text(std::string text)
             {
                 m_size = geometry::size(0,0);
                 std::istringstream stream(text);
@@ -33,12 +33,12 @@ namespace mmcurses
                 }
             }
             
-            geometry::size size()
+            geometry::size size() override
             {
                 return m_size;
             }
             
-            void render(render_buffer_view &buffer)
+            void render(render_buffer_view &buffer) override
             {
                 int line_index = 0;
                 for (const auto& line : m_text)

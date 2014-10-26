@@ -124,7 +124,7 @@ namespace mmcurses
                     }
                     
                 }
-               return false;
+                return false;
             }
 
             bool focussable() override
