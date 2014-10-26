@@ -1,7 +1,8 @@
  
 #include <mmcurses/widget_application.h>
-#include <mmcurses/rows.h>
-#include <mmcurses/label.h>
+#include <mmcurses/widget/rows.h>
+#include <mmcurses/widget/label.h>
+#include <mmcurses/widget/constant.h>
 
 struct constant_char : mmcurses::widget::constant
 {

@@ -1,7 +1,7 @@
 #pragma once
 
 #include <mmcurses/application.h>
-#include <mmcurses/widget.h>
+#include <mmcurses/widget/base.h>
 
 #include <memory>
 

@@ -1,5 +1,6 @@
  
 #include <mmcurses/widget_application.h>
+#include <mmcurses/widget/constant.h>
 
 struct constant_char : mmcurses::widget::constant
 {
