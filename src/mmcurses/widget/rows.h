@@ -61,9 +61,7 @@ namespace mmcurses
                         
                         space_remaining -= w.second;
                     }
-                    
-                    
-                    
+                                        
                     render_buffer_view widget_buffer
                     (
                         geometry::size
