@@ -13,16 +13,6 @@
 
 namespace mmcurses
 {
-    namespace layout
-    {
-        struct base
-        {
-            
-        };
-        
-        typedef std::shared_ptr<base> ptr;
-    }
-    
     namespace widget
     {
         struct base;
@@ -34,10 +24,6 @@ namespace mmcurses
         */
         struct base
         {
-            std::vector<ptr> m_children;
-            
-            layout::ptr m_layout;
-            
             /**
                 When true, indicates that this widget has focus (one of its 
                 children having focus also indicates truth).
